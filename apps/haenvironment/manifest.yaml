@@ -1,0 +1,8 @@
+---
+id: ha-environment
+name: HA Environment
+summary: Hass in and outdoor env
+desc: Retrieves specific entities from Home Assistant to display the indoor and outdoor environment.
+author: markrad
+fileName: ha_temperatures.star
+packageName: hatemperatures
