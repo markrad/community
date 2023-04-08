@@ -1,0 +1,8 @@
+---
+id: day-countdown
+name: Day Countdown
+summary: Number of days to event
+desc: A simple display with an event name and the number of days before the provided date is reached.
+author: markrad
+fileName: day_countdown.star
+packageName: daycountdown
