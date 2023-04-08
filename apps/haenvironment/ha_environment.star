@@ -7,11 +7,11 @@ Author: markrad
 # Thanks to InTheDaylight14 for his app that show how to acquire value from HA with the REST interface
 # Thanks to danmcclain for his code to layout the values which mine are startlingly similar to
 
-load("render.star", "render")
-load("schema.star", "schema")
 load("cache.star", "cache")
 load("http.star", "http")
 load("math.star", "math")
+load("render.star", "render")
+load("schema.star", "schema")
 
 STATIC_ENDPOINT = "/api/states/"
 DEFAULT_COLOR = "#aaaaaa"
@@ -64,7 +64,7 @@ def main(config):
                     render.Text("{}".format(od_temperature) + "   ", font = "tom-thumb", color = "#33cc33"),
                     render.Text("{}".format(od_humidity), font = "tom-thumb", color = "#0040ff"),
                 ],
-            )
+            ),
         ),
     )
     rows.append(render.Box(height = 3))
@@ -84,7 +84,7 @@ def main(config):
             offset_start = 64,
             offset_end = 64,
             child = render.Text(weather, font = "tom-thumb"),
-        )
+        ),
     )
 
     return render.Root(
@@ -106,12 +106,12 @@ def get_entity(url, token, entity):
         if result == None:
             body = call_ha(url, token, entity)
 
-            if not 'state' in body:
-                result = '!BAD'
+            if not "state" in body:
+                result = "!BAD"
             else:
-                result = body['state']
-                if 'attributes' in body and 'unit_of_measurement' in body['attributes']:
-                    result += body['attributes']['unit_of_measurement']
+                result = body["state"]
+                if "attributes" in body and "unit_of_measurement" in body["attributes"]:
+                    result += body["attributes"]["unit_of_measurement"]
         else:
             print("Using cached state")
     else:
@@ -128,23 +128,23 @@ def get_weather(url, token, entity):
 
         if result == None:
             body = call_ha(url, token, entity)
-            if not 'attributes' in body or not 'forecast' in body['attributes'] or "list" != type(body['attributes']['forecast']):
-                result = 'JSON not recognized'
+            if not "attributes" in body or not "forecast" in body["attributes"] or "list" != type(body["attributes"]["forecast"]):
+                result = "JSON not recognized"
             else:
-                forecast = (body['attributes']['forecast'])[0]
-                if not 'templow' in forecast or not 'temperature' in forecast or 'float' != type(forecast['templow']) or 'float' != type(forecast['temperature']):
-                    result = 'JSON does not contain forcast temps'
+                forecast = (body["attributes"]["forecast"])[0]
+                if not "templow" in forecast or not "temperature" in forecast or "float" != type(forecast["templow"]) or "float" != type(forecast["temperature"]):
+                    result = "JSON does not contain forcast temps"
                 else:
-                    lo = int(math.round(forecast['templow']))
-                    hi =  int(math.round(forecast['temperature']))
+                    lo = int(math.round(forecast["templow"]))
+                    hi = int(math.round(forecast["temperature"]))
                     unit = "  "
-                    if "temperature_unit" in body['attributes']:
-                        unit = body['attributes']['temperature_unit']
+                    if "temperature_unit" in body["attributes"]:
+                        unit = body["attributes"]["temperature_unit"]
                     result = "{} {}/{}{}".format(
-                        (body['attributes']['forecast'])[0]['condition'],
+                        (body["attributes"]["forecast"])[0]["condition"],
                         lo,
-                        hi, 
-                        unit
+                        hi,
+                        unit,
                     )
         else:
             print("Using cached state")
@@ -159,11 +159,11 @@ def call_ha(url, token, entity):
     full_url = url + STATIC_ENDPOINT + entity
     headers = {
         "Authorization": full_token,
-        "content_type": "application/json"
+        "content_type": "application/json",
     }
     res = http.get(
         url = full_url,
-        headers = headers
+        headers = headers,
     )
 
     if res.status_code != 200:
@@ -191,37 +191,37 @@ def get_schema():
                 id = CONFIG_OUTDOOR_TEMPERATURE,
                 name = "Outdoor Temperature",
                 desc = "Home Assistant sensor entity with outdoor temperature",
-                icon = "temperatureHalf"
+                icon = "temperatureHalf",
             ),
             schema.Text(
                 id = CONFIG_OUTDOOR_HUMIDITY,
                 name = "Outdoor Humidity",
                 desc = "Home Assistant sensor entity with the outdoor humidity",
-                icon = "dropletPercent"
+                icon = "dropletPercent",
             ),
             schema.Text(
                 id = CONFIG_INDOOR_TEMPERATURE,
                 name = "Indoor Temperature",
                 desc = "Home Assistant sensor entity with the indoor temperature",
-                icon = "temperatureHalf"
+                icon = "temperatureHalf",
             ),
             schema.Text(
                 id = CONFIG_INDOOR_HUMIDITY,
                 name = "Indoor Humidity",
                 desc = "Home Assistant sensor entity with the indoor humidity",
-                icon = "dropletPercent"
+                icon = "dropletPercent",
             ),
             schema.Text(
                 id = CONFIG_PRESSURE,
                 name = "Pressure",
                 desc = "Home Assistant sensor entity containing the pressure",
-                icon = "bars"
+                icon = "bars",
             ),
             schema.Text(
                 id = CONFIG_WEATHER,
                 name = "Weather",
                 desc = "Home Assistant weather entity (displays first entry)",
-                icon = "mountainSun"
+                icon = "mountainSun",
             ),
         ],
     )
